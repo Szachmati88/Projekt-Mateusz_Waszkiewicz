@@ -1,0 +1,62 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Stylizacja tła i koloru tekstu dla całej strony */
+body {
+  background-color: #121212;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+/* Stylizacja nagłówka */
+.header {
+  background-color: #1db954;
+  padding: 16px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Stylizacja przycisku FILTRUJ PIOSENKI */
+#filterButton {
+  background-color: #1db954;
+  color: #fff;
+  font-size: 18px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#filterButton:hover {
+  background-color: #1ed760;
+}
+
+/* Stylizacja formularza */
+select,
+input {
+  padding: 10px;
+  margin: 10px;
+  font-size: 16px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+}
+
+/* Stylizacja wyników */
+#songsDiv {
+  padding: 16px;
+}
+
+.song {
+  padding: 10px;
+  border: 1px solid #333;
+  margin: 10px 0;
+  background-color: #333;
+}
+
+.song span {
+  font-size: 18px;
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="./RWD.css" />
+  </head>
+  <body>
+    <div class="body">
+      <button id="filterButton">FILTRUJ PIOSENKI</button>
+      <div id="songsDiv">
+        <span></span>
+      </div>
+      <div class="option">
+        <input type="text" id="searchInput" placeholder="Szukaj piosenki" />
+        <select name="genre" id="genre">
+          <option value="default">Wybierz gatunek</option>
+          <option value="Pop">Pop</option>
+          <option value="Rap">Rap</option>
+          <option value="R%B">R&B</option>
+          <option value="Trap">Trap</option>
+          <option value="Drill">Drill</option>
+          <option value="House">House</option>
+          <option value="Techno">Techno</option>
+          <option value="Rock">Rock</option>
+          <option value="Indie">Indie</option>
+        </select>
+        <select name="BPM" id="bpm">
+          <option value="default">Wybierz tempo</option>
+          <option value="slow">Wolne</option>
+          <option value="medium">Średnie</option>
+          <option value="fast">Szybkie</option>
+        </select>
+      </div>
+    </div>
+    <script>
+      const span = document.querySelector("span");
+      const filterButton = document.getElementById("filterButton");
+      const genreSelect = document.getElementById("genre");
+      const bpmSelect = document.getElementById("bpm");
+
+      filterButton.addEventListener("click", () => {
+        filterSongs();
+      });
+
+      const filterSongs = () => {
+        const selectedGenre = genreSelect.value;
+        const selectedBPM = bpmSelect.value;
+
+        fetch(
+          "https://gist.githubusercontent.com/techniadrian/c39f844edbacee0439bfeb107227325b/raw/81eec7847b1b3dfa1c7031586405c93e9a9c1a2d/songs.json"
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            const filteredSongs = data.filter((song) => {
+              if (
+                (selectedGenre === "default" || song.genre === selectedGenre) &&
+                (selectedBPM === "default" || song.bpm === selectedBPM)
+              ) {
+                return true;
+              }
+              return false;
+            });
+
+            displayFilteredSongs(filteredSongs);
+          });
+      };
+
+      const displayFilteredSongs = (songs) => {
+        span.innerHTML = "";
+        songs.forEach((song) => {
+          const songDiv = document.createElement("div");
+          songDiv.className = "song";
+          songDiv.innerHTML = `<span>${song.title} | ${song.genre} | ${song.bpm}</span>`;
+          span.appendChild(songDiv);
+        });
+      };
+
+      // Dodaj funkcję do kategorizacji BPM
+      const categorizeBPM = (bpm) => {
+        if (bpm < 100) {
+          return "slow";
+        } else if (bpm <= 140) {
+          return "medium";
+        } else {
+          return "fast";
+        }
+      };
+
+      // Przypisz kategorie BPM do każdej piosenki
+      fetch(
+        "https://gist.githubusercontent.com/techniadrian/c39f844edbacee0439bfeb107227325b/raw/81eec7847b1b3dfa1c7031586405c93e9a9c1a2d/songs.json"
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((song) => {
+            song.bpm = categorizeBPM(song.bpm);
+          });
+          const filteredSongs = data.filter((song) => {
+            const lowercaseTitle = song.title.toLowerCase(); // Zamień nazwę piosenki na małe litery
+            return (
+              (selectedGenre === "default" || song.genre === selectedGenre) &&
+              (selectedBPM === "default" || song.bpmCategory === selectedBPM) &&
+              (searchQuery === "" || lowercaseTitle.includes(searchQuery)) // Sprawdź, czy fraza jest zawarta w nazwie piosenki
+            );
+          });
+          displayFilteredSongs(filteredSongs);
+        });
+    </script>
+  </body>
+</html>
